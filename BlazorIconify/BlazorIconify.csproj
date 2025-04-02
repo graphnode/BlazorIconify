@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Graphnode.BlazorIconify</AssemblyName>
+    <RootNamespace>Graphnode.BlazorIconify</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0-alpha</Version>
+    <Title>Graphnode.BlazorIconify</Title>
+    <Authors>Diogo Gomes</Authors>
+    <Description>Unofficial, experimental Iconify support for Blazor. Includes an &lt;Iconify&gt; component and uses source generators to embed icons at build time. Falls back to web requests in dynamic situations.</Description>
+    <PackageProjectUrl>https://github.com/graphnode/BlazorIconify</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/graphnode/BlazorIconify</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>blazor iconify</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>line-md--iconify2-static.png</PackageIcon>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <SupportedPlatform Include="browser"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.14"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\Graphnode.BlazorIconify.SourceGenerator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Update="line-md--iconify2-static.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlazorIconify.SourceGenerator\BlazorIconify.SourceGenerator.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

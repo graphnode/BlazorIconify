@@ -1,0 +1,83 @@
+﻿@using System.Text.Json.Nodes
+@using Microsoft.Extensions.Options
+
+@inject IIconifyCache IconifyCache
+@inject IOptions<BlazorIconifyOptions> IconifyOptions
+
+@if (body != null)
+{
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 @width @height" @attributes="@Attributes">
+        @((MarkupString)body)
+    </svg>
+}
+
+@code {
+    private static readonly HttpClient _httpClient = new();
+
+    [Parameter]
+    public string? Name { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = null!;
+
+    private int width = 24;
+    private int height = 24;
+    private string? body;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Name == null)
+            return;
+
+        (_, _, body, width, height) = await GetIcon(Name);
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task<(string Prefix, string Icon, string? Body, int Width, int Height)> GetIcon(string name)
+    {
+        // ReSharper disable LocalVariableHidesMember
+        var (prefix, icon, body, width, height) = IconifyCache.GetIcon(name);
+        // ReSharper restore LocalVariableHidesMember
+        if (body != null)
+            return (prefix, icon, body, width, height);
+
+        prefix = name.Split(':')[0];
+        icon = name.Split(':')[1];
+
+        if (!IconifyOptions.Value.EnableRemoteFetching)
+            return (prefix, icon, null, 16, 16);
+
+        var url = $"{IconifyOptions.Value.RemoteApiUrl}/{prefix}.json?icons={icon}";
+        var response = await _httpClient.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+            return (prefix, icon, null, 16, 16);
+
+        var jsonString = await response.Content.ReadAsStringAsync();
+        var iconifyJson = JsonNode.Parse(jsonString)!;
+
+        // Get width and height from the JSON
+        var defaultWidth = iconifyJson["width"]?.GetValue<int>() ?? 16;
+        var defaultHeight = iconifyJson["height"]?.GetValue<int>() ?? 16;
+
+        // Access the icons object and iterate through its properties
+        var iconsObject = iconifyJson["icons"]?.AsObject();
+        if (iconsObject == null)
+            return (prefix, icon, null, 16, 16);
+
+        foreach(var (iconName, value) in iconsObject)
+        {
+            var iconBody = value?["body"]?.ToString();
+
+            if (iconBody == null)
+                continue;
+
+            var iconWidth = value?["width"]?.GetValue<int>() ?? defaultWidth;
+            var iconHeight = value?["height"]?.GetValue<int>() ?? defaultHeight;
+
+            return (prefix, iconName, iconBody, iconWidth, iconHeight);
+        }
+
+        return (prefix, icon, null, 16, 16);
+    }
+}
