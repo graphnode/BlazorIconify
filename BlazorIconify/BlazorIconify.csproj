@@ -17,6 +17,7 @@
     <PackageTags>blazor iconify</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>line-md--iconify2-static.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   
   <ItemGroup>
@@ -31,12 +32,17 @@
     <None Include="$(OutputPath)\Graphnode.BlazorIconify.SourceGenerator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     <None Update="line-md--iconify2-static.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>/</PackagePath>
     </None>
+    <Content Include="..\README.md">
+      <Link>README.md</Link>
+      <Pack>True</Pack>
+      <PackagePath>/</PackagePath>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BlazorIconify.SourceGenerator\BlazorIconify.SourceGenerator.csproj" PrivateAssets="all" />
   </ItemGroup>
-
+  
 </Project>
