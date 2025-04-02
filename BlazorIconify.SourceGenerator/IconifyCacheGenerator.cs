@@ -19,8 +19,6 @@ public class IconifyCacheGenerator : IIncrementalGenerator
 
     private static readonly MemoryCache _cache = new();
 
-    private record struct IconifyRecord(string Prefix, string Name, string Body, int Width, int Height);
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Find all additional files that end with .razor
@@ -47,6 +45,7 @@ public class IconifyCacheGenerator : IIncrementalGenerator
             initializationContext.AddSource("IconifyConfig.g.cs", SourceText.From("""
                 #nullable enable
                 
+                using System;
                 using Microsoft.Extensions.DependencyInjection;
 
                 namespace Graphnode.BlazorIconify;
@@ -79,7 +78,7 @@ public class IconifyCacheGenerator : IIncrementalGenerator
         }
     }
 
-    private static IEnumerable<IconifyRecord> DownloadIconSources(IEnumerable<string> iconNames, CancellationToken ct)
+    private static IEnumerable<IconData> DownloadIconSources(IEnumerable<string> iconNames, CancellationToken ct)
     {
         // Group icon names by prefix
         var iconsByPrefix = iconNames
@@ -144,13 +143,13 @@ public class IconifyCacheGenerator : IIncrementalGenerator
                     var width = value["width"]?.GetValue<int?>() ?? defaultWidth;
                     var height = value["height"]?.GetValue<int?>() ?? defaultHeight;
 
-                    yield return new IconifyRecord(prefix, iconName, iconBody, width, height);
+                    yield return new IconData(prefix, iconName, iconBody, width, height);
                 }
             }
         }
     }
 
-    private static void GenerateIconRegistry(SourceProductionContext context, ImmutableArray<IconifyRecord> icons)
+    private static void GenerateIconRegistry(SourceProductionContext context, ImmutableArray<IconData> icons)
     {
         var sb = new StringBuilder();
         sb.AppendLine("""
@@ -160,7 +159,7 @@ public class IconifyCacheGenerator : IIncrementalGenerator
 
             public class IconifyCache : IIconifyCache
             {
-                public (string Prefix, string Icon, string? Body, int Width, int Height) GetIcon(string name)
+                public IconData GetIcon(string name)
                 {
                     switch (name)
                     {
@@ -170,13 +169,13 @@ public class IconifyCacheGenerator : IIncrementalGenerator
         {
             sb.AppendLine($"""
                             case "{icon.Prefix}:{icon.Name}":
-                                return ("{icon.Prefix}", "{icon.Name}", "{icon.Body.Replace("\"", "\\\"")}", {icon.Width}, {icon.Height});
+                                return new IconData("{icon.Prefix}", "{icon.Name}", "{icon.Body.Replace("\"", "\\\"")}", {icon.Width}, {icon.Height});
                 """);
         }
 
         sb.AppendLine("""
                         default:
-                            return (name.Split(":")[0], name.Split(":")[1], null, 16, 16);
+                            return default;
                     }
                 }
             }

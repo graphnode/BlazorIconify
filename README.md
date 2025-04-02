@@ -14,6 +14,37 @@ Uses source generators to embed icon data at build time for fast, offline-friend
 
 Install the package Graphnode.BlazorIconify from NuGet.
 
+Add the service in your `Program.cs`:
+
+```csharp
+using Graphnode.BlazorIconify;
+
+builder.Services.AddBlazorIconify();
+```
+*Note:* If it can't resolve `AddBlazorIconify` it's because the source generator did not run.
+
+You can configure the service with options (shown with default values):
+
+```csharp
+builder.Services.AddBlazorIconify(options =>
+{
+    // Allow remote fetching for icons not embedded at build time
+    options.EnableRemoteFetching = true;
+    
+    // Set the remote API URL for fetching icons
+    options.RemoteApiUrl = "https://api.iconify.design";
+    
+    // Throw an exception if the icon is not found in the source cache and remote fetching fails or is disabled.
+    options.ThrowIfIconNotFound = false;
+});
+```
+
+Then add the import in your `_Imports.razor` or in the component where you want to use it:
+
+```razor
+@using Graphnode.BlazorIconify
+```
+
 ## Usage
 
 Use the `<Iconify>` component in your Blazor app to render icons. You can specify the icon name using the `Name` parameter.

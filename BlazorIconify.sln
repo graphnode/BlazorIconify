@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorIconify.SourceGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorIconify.Tests", "BlazorIconify.Tests\BlazorIconify.Tests.csproj", "{BF7CF494-F508-4DA5-8F0C-AE372665E9F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorIconify.Sample", "BlazorIconify.Sample\BlazorIconify.Sample.csproj", "{3C075A09-A708-48AE-AA96-941EA2DA407D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +24,5 @@ Global
 		{BF7CF494-F508-4DA5-8F0C-AE372665E9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF7CF494-F508-4DA5-8F0C-AE372665E9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF7CF494-F508-4DA5-8F0C-AE372665E9F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C075A09-A708-48AE-AA96-941EA2DA407D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C075A09-A708-48AE-AA96-941EA2DA407D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C075A09-A708-48AE-AA96-941EA2DA407D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C075A09-A708-48AE-AA96-941EA2DA407D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

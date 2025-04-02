@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Immutable;
+using System.Linq;
 using Graphnode.BlazorIconify.SourceGenerator;
 using Graphnode.BlazorIconify.Tests.Utilities;
 using Microsoft.CodeAnalysis;
@@ -105,7 +107,10 @@ public class IconifyCacheGeneratorTests
         var driver = CSharpGeneratorDriver.Create(generator)
             .AddAdditionalTexts(additionalTexts);
 
-        return driver.RunGenerators(compilation).GetRunResult();
+        driver.RunGenerators(compilation);
+
+        GeneratorDriverRunResult runResult = driver.GetRunResult();
+        return runResult;
     }
 
     private static string GetGeneratedIconRegistry(GeneratorDriverRunResult result)

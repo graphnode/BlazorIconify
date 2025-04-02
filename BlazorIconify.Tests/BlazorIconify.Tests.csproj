@@ -2,28 +2,42 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
     <AssemblyName>Graphnode.BlazorIconify.Tests</AssemblyName>
-    <RootNamespace>Graphnode.BlazorIconify.Tests</RootNamespace>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <NoWarn>1701;1702;MSB3243</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <NoWarn>1701;1702;MSB3243</NoWarn>
+  </PropertyGroup>
+      
   <ItemGroup>
     <PackageReference Include="bunit" Version="1.38.5" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-
+    
   <ItemGroup>
     <Using Include="Xunit"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlazorIconify.SourceGenerator\BlazorIconify.SourceGenerator.csproj" OutputItemType="Analyzer" />
+    <ProjectReference Include="..\BlazorIconify.SourceGenerator\BlazorIconify.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
     <ProjectReference Include="..\BlazorIconify\BlazorIconify.csproj" />
   </ItemGroup>
 
