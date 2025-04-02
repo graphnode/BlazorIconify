@@ -1,4 +1,7 @@
-﻿@inherits TestContext
+﻿@namespace BlazorIconify.Tests
+
+@inherits BunitContext
+
 @code
 {
     [Fact(DisplayName = "Icon Render")]
@@ -15,6 +18,47 @@
         </svg>);
     }
 
+    [Fact(DisplayName = "Icon Render Without Name")]
+    public void IconRenderWithoutName()
+    {
+        Services.AddBlazorIconify();
+
+        var cut = Render(@<Iconify />);
+
+        cut.MarkupMatches("");
+    }
+
+    [Fact(DisplayName = "Icon Render With Dynamic Name")]
+    public void IconRenderWithDynamicName()
+    {
+        Services.AddBlazorIconify();
+
+        var iconName = "material-symbols:dynamic-form";
+
+        var cut = Render(@<Iconify Name="@iconName" />);
+
+        cut.WaitForElement("svg");
+
+        cut.MarkupMatches(@<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M4 11q-.825 0-1.412-.587T2 9V6q0-.825.588-1.412T4 4h9v7zm0 9q-.825 0-1.412-.587T2 18v-3q0-.825.588-1.412T4 13h11v7zm13 0v-9h-2V4h7l-2 5h2zM4.75 17.25h1.5v-1.5h-1.5zm0-9h1.5v-1.5h-1.5z"/>
+        </svg>);
+    }
+
+    [Fact(DisplayName = "Icon Render With Dynamic Name Without Fetching")]
+    public void IconRenderWithDynamicNameWithoutRemoteFetching()
+    {
+        Services.AddBlazorIconify((options) =>
+        {
+            options.EnableRemoteFetching = false;
+        });
+
+        var iconName = "material-symbols:dynamic-form";
+
+        var cut = Render(@<Iconify Name="@iconName" />);
+
+        cut.MarkupMatches("");
+    }
+
     [Fact(DisplayName = "Icon Render Without Fetching")]
     public void IconRenderWithoutFetching()
     {
@@ -25,11 +69,26 @@
 
         var cut = Render(@<Iconify Name="mdi:home" />);
 
-        cut.WaitForElement("svg", TimeSpan.FromSeconds(5));
+        cut.WaitForElement("svg");
 
         cut.MarkupMatches(@<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
             <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3L2 12h3v8z"></path>
         </svg>);
+    }
+
+    [Fact(DisplayName = "Icon Render With Fetching But Server Not Available")]
+    public void IconRenderWithFetchingButServerNotAvailable()
+    {
+        Services.AddBlazorIconify((options) =>
+        {
+            options.RemoteApiUrl = "https://www.google.com/404";
+        });
+
+        var iconName = "tabler:error-404";
+
+        var cut = Render(@<Iconify Name="@iconName" />);
+
+        cut.MarkupMatches("");
     }
 
     [Fact(DisplayName = "Icon Render With Class")]

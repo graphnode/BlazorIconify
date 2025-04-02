@@ -7,7 +7,7 @@
     <AssemblyName>Graphnode.BlazorIconify</AssemblyName>
     <RootNamespace>Graphnode.BlazorIconify</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.2.0-alpha</Version>
     <Title>Graphnode.BlazorIconify</Title>
     <Authors>Diogo Gomes</Authors>
     <Description>Unofficial, experimental Iconify support for Blazor. Includes an &lt;Iconify&gt; component and uses source generators to embed icons at build time. Falls back to web requests in dynamic situations.</Description>

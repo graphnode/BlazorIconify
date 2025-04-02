@@ -43,11 +43,12 @@
         var (prefix, icon) = name.Split(':', 2) switch { var a => (a[0], a[1]) };
 
         var url = $"{IconifyOptions.Value.RemoteApiUrl}/{prefix}.json?icons={icon}";
+
         var response = await _httpClient.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
             if (IconifyOptions.Value.ThrowIfIconNotFound)
-                throw new IconNotFoundException($"Icon '{name}' not found.");
+                throw new BlazorIconifyException($"Failed to fetch icon '{name}'.");
             else
                 return default;
 
@@ -62,7 +63,7 @@
         var iconsObject = iconifyJson["icons"]?.AsObject();
         if (iconsObject == null)
             if (IconifyOptions.Value.ThrowIfIconNotFound)
-                throw new IconNotFoundException($"Icon '{name}' not found.");
+                throw new BlazorIconifyException($"Icon '{name}' not found in the server response.");
             else
                 return default;
 
@@ -79,7 +80,7 @@
         }
 
         if (IconifyOptions.Value.ThrowIfIconNotFound)
-            throw new IconNotFoundException($"Icon '{name}' not found.");
+            throw new BlazorIconifyException($"Icon '{name}' not found.");
 
         return default;
     }

@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Immutable;
-using System.Linq;
-using Graphnode.BlazorIconify.SourceGenerator;
-using Graphnode.BlazorIconify.Tests.Utilities;
+using BlazorIconify.SourceGenerator.Tests.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace Graphnode.BlazorIconify.Tests;
+namespace Graphnode.BlazorIconify.SourceGenerator.Tests;
 
 public class IconifyCacheGeneratorTests
 {
@@ -107,9 +104,9 @@ public class IconifyCacheGeneratorTests
         var driver = CSharpGeneratorDriver.Create(generator)
             .AddAdditionalTexts(additionalTexts);
 
-        driver.RunGenerators(compilation);
+        driver = driver.RunGenerators(compilation);
 
-        GeneratorDriverRunResult runResult = driver.GetRunResult();
+        var runResult = driver.GetRunResult();
         return runResult;
     }
 

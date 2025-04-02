@@ -1,9 +1,8 @@
 ﻿using System.Text;
-using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Graphnode.BlazorIconify.Tests.Utilities;
+namespace BlazorIconify.SourceGenerator.Tests.Utilities;
 
 // Helper class to create mock additional text files
 public class MockAdditionalText(string path, string text) : AdditionalText
